@@ -8,20 +8,24 @@ import org.springframework.context.annotation.Profile;
 
 import javax.annotation.PostConstruct;
 
-@Configuration //Indica que esta classe sera gerenciada pelo Spring
-@Profile("dev") // Sera instanciada apenas se o perfil ativo for "dev"
+// indica que esta classe será gerenciada pelo Spring
+// e que ela é uma classe de configuração
+@Configuration
+@Profile("dev") // será instanciada apenas se o perfil ativo for "dev"
 public class DevConfig {
-    //esta classe ira chamar o Populate service caso o perfil ativo seja de desenvolvimento
+    // Esta classe irá chamar o PopulateService caso o perfil ativo seja de desenvolvimento
     @Autowired
     private PopulateService populateService;
 
-    @Value("{spring.jpa.hibernate.ddl-auto}") // vai acessar a propriedade
+    @Value("${spring.jpa.hibernate.ddl-auto}") // vai acessar a propriedade
     private String ddlAuto;
 
-    @PostConstruct //faz com que o metodo execute após a instancia ser criada
+    @PostConstruct // faz com que o método execute após a instância ser criada
     public void init() {
+        // se o modo for create, insere os dados fictícios
         if(this.ddlAuto.equals("create")) {
-           this.populateService.populate(); // inserir os dados novos caso a tabela tenha sido dropada
+            // inserir os dados novos caso a tabela tenha sido dropada
+            this.populateService.populate();
         }
     }
 }
