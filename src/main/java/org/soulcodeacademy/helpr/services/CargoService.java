@@ -13,34 +13,51 @@ public class CargoService {
     @Autowired
     private CargoRepository cargoRepository;
 
-    //Listar todos
+    // Listar todos
     public List<Cargo> listar() {
-        //retorna os dados da tabela em forma de lista
+        // Retorna os dados da tabela em forma de lista
         // SELECT * FROM cargo;
         return this.cargoRepository.findAll();
     }
+
     // Listar um pelo ID
     public Cargo getCargo(Integer idCargo) {
-        //SELECT * FROM cargo WHERE idCargo= ?
-        // Optional = pode haver cargo ou não
+        // SELECT * FROM cargo WHERE idCargo = ?
+        // Optional = Pode haver cargo ou não
         Optional<Cargo> cargo = this.cargoRepository.findById(idCargo);
 
-        if(cargo.isEmpty()) { // não encontrou o cargo?
-            //Não encontrou o cargo com o id solicitado
-            throw new RuntimeException("O cargo não foi encontrado"); // Causa um erro com a mensagem
+        if(cargo.isEmpty()) { // Não encontrou o cargo?
+            // Não encontrou o cargo com id solicitado
+            throw new RuntimeException("O cargo não foi encontrado!"); // Causa um erro com a mensagem
         } else {
-            return cargo.get(); // extrair o cargo de dentro do optional
+            return cargo.get(); // Extrair o cargo de dentro do optional
         }
-
     }
-
-    //salvar
+    // Salvar
     public Cargo salvar(Cargo novoCargo) {
         novoCargo.setIdCargo(null); // Limpar o campo id para não substituir
         // INSERT INTO cargo
         Cargo cargoSalvo = this.cargoRepository.save(novoCargo);
         return cargoSalvo;
     }
-    //atualizar
-    //deletar
+    // Atualizar
+    // Precisa do ID do cargo e dos dados atualizados
+    public Cargo atualizar(Integer idCargo, Cargo novoCargo) {
+        // Verificar se o cargo existe mesmo
+        Cargo cargoAtual = this.getCargo(idCargo);
+
+        cargoAtual.setNome(novoCargo.getNome());
+        cargoAtual.setDescricao(novoCargo.getDescricao());
+        cargoAtual.setSalario(novoCargo.getSalario());
+
+        // Atualiza a entidade pois ela possui um ID diferente de nulo
+        Cargo atualizado = this.cargoRepository.save(cargoAtual);
+        return atualizado;
+    }
+    // Deletar
+    public void deletar(Integer idCargo) {
+        Cargo cargo = this.getCargo(idCargo);
+        // DELETE FROM cargo WHERE idCargo = ?
+        this.cargoRepository.delete(cargo);
+    }
 }

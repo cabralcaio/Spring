@@ -7,18 +7,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController //Retornos de dados
+
+@RestController // retornos de dados
 public class CargoController {
 
-    //Endpoint é o endereço que será acessado no backend
-    @GetMapping("/oi") //com base em localhosto8080/oi retorna a String
-    public String dizOla(){
-        return "Olá Mundo!";
+    // Endpoint é o endereço que será acessado no backend
+    @GetMapping("/oi") // com base em localhost:8080/oi retorna a String
+    public String dizOla() {
+        return "Olá, tudo bem?"; // resposta da requisição
     }
 
     @GetMapping("/batata")
     public Integer valor() {
-        return 1000; //resposta da requisição
+        return 1000; // resposta da requisição
     }
 
     @Autowired
@@ -26,12 +27,13 @@ public class CargoController {
 
     @GetMapping("/cargos")
     public List<Cargo> listar() {
-        return this.cargoService.listar();  // formato JSON = JAVASCRIPT OBJECT NOTATION
+        // Requisição -> Controller -> Service -> Repository -> SELECT * FROM cargo;
+        return this.cargoService.listar(); // JSON = JAVASCRIPT OBJECT NOTATION
     }
 
-    @GetMapping("/cargos/{idCargo}") // indica q o valor após a barra é dinâmico!
+    @GetMapping("/cargos/{idCargo}") // indica que o valor após a barra é dinâmico!
     public Cargo getCargo(@PathVariable Integer idCargo) {
-        // @PathVariable  => extrai do endpoint o valor dinâmico
+        // @PathVariable => extrai do endpoint o valor dinâmico
         return this.cargoService.getCargo(idCargo);
     }
 
@@ -41,5 +43,17 @@ public class CargoController {
         // @RequestBody - extrair o JSON do corpo e converte para Cargo (deserialização)
         Cargo salvo = this.cargoService.salvar(cargo);
         return salvo; // A resposta será o cargo inserido
+    }
+
+    // Mapeia requisições do verbo PUT
+    @PutMapping("/cargos/{idCargo}") // /cargos/5
+    public Cargo atualizar(@PathVariable Integer idCargo, @RequestBody Cargo cargo) {
+        Cargo atualizado = this.cargoService.atualizar(idCargo, cargo);
+        return atualizado; // Resposta para o cliente (cargo atualizado)
+    }
+
+    @DeleteMapping("/cargos/{idCargo}") // Verbo DELETE no /cargos/1
+    public void deletar(@PathVariable Integer idCargo) {
+        this.cargoService.deletar(idCargo);
     }
 }
