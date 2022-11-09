@@ -1,8 +1,10 @@
 package org.soulcodeacademy.helpr.services;
 
 import org.soulcodeacademy.helpr.domain.Cargo;
+import org.soulcodeacademy.helpr.domain.Cliente;
 import org.soulcodeacademy.helpr.domain.Funcionario;
 import org.soulcodeacademy.helpr.repositories.CargoRepository;
+import org.soulcodeacademy.helpr.repositories.ClienteRepository;
 import org.soulcodeacademy.helpr.repositories.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class PopulateService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
+    @Autowired
+    private ClienteRepository clienteRepository;
+
     public void populate() {
         // Integer idCargo, String nome, String descricao, Double salario
         Cargo c1 = new Cargo(null, "Diretor Geral", "Gerencia a empresa", 30000.0);
@@ -26,6 +31,8 @@ public class PopulateService {
 
         Funcionario f2 = new Funcionario(null, "Victor Icoma", "victor.icoma@gmail.com", "51127383671", "12345", null, c2);
 
+        Cliente cl1 = new Cliente(null, "Elen Cabral", "elencabral@gmail.com", "42556688980", "5748541","4225080");
+
         // vamos persistir as entidades = salvar no banco
         this.cargoRepository.save(c1); // INSERT INTO
         this.cargoRepository.save(c2);
@@ -33,6 +40,8 @@ public class PopulateService {
 
         this.funcionarioRepository.save(f1);
         this.funcionarioRepository.save(f2);
+
+        this.clienteRepository.save(cl1);
     }
 }
 
