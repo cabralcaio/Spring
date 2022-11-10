@@ -16,8 +16,6 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @Autowired
-    private ClienteService clienteService;
 
     public List<Cliente> listar() {
         return this.clienteRepository.findAll();
@@ -37,6 +35,24 @@ public class ClienteService {
         Cliente cliente = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpf(), dto.getSenha(), dto.getTelefone());
         Cliente salvo = this.clienteRepository.save(cliente);
         return salvo;
+    }
+
+    public Cliente atualizar(Integer idCliente, ClienteDTO dto) {
+        Cliente clienteAtual = this.getCliente(idCliente);
+
+        clienteAtual.setNome(dto.getNome());
+        clienteAtual.setEmail(dto.getEmail());
+        clienteAtual.setCpf(dto.getCpf());
+        clienteAtual.setSenha(dto.getSenha());
+        clienteAtual.setTelefone(dto.getTelefone());
+
+        Cliente clienteAtualizado = this.clienteRepository.save(clienteAtual);
+        return clienteAtualizado;
+    }
+
+    public void deletar(Integer idCliente){
+        Cliente cliente = this.getCliente(idCliente);
+        this.clienteRepository.delete(cliente);
     }
 
 }

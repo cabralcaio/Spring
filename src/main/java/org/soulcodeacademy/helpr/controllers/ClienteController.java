@@ -31,4 +31,15 @@ public class ClienteController {
         return cliente;
     }
 
+    @PutMapping("clientes/{id}")
+    public Cliente atualizar(@PathVariable Integer id, @Valid @RequestBody ClienteDTO dto){
+        Cliente cliente = this.clienteService.atualizar(id, dto);
+        return cliente;
+    }
+
+    @DeleteMapping("clientes/{id}")
+    public void deletar(@PathVariable Integer id){
+        this.clienteService.deletar(id);
+    }
+
 }
